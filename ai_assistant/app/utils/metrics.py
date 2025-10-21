@@ -3,7 +3,7 @@
 """
 from prometheus_client import Counter, Histogram, Gauge, generate_latest, CONTENT_TYPE_LATEST
 from flask import Response
-from app.config import METRICS_ENABLED
+from ai_assistant.app.config import METRICS_ENABLED
 
 # Счетчики
 requests_total = Counter(

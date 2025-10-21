@@ -1,11 +1,43 @@
 """
-Система логирования для AI Assistant
+Система логирования для AI Assistant (упрощенная версия)
 """
 import logging
 import sys
+import json
 from pathlib import Path
-from pythonjsonlogger import jsonlogger
-from app.config import LOG_LEVEL, LOG_FILE, LOG_FORMAT
+from ai_assistant.app.config import LOG_LEVEL, LOG_FILE, LOG_FORMAT
+
+
+class JSONFormatter(logging.Formatter):
+    """Простой JSON форматтер"""
+
+    def format(self, record):
+        log_data = {
+            'asctime': self.formatTime(record, '%Y-%m-%d %H:%M:%S'),
+            'name': record.name,
+            'levelname': record.levelname,
+            'message': record.getMessage()
+        }
+
+        # Добавляем extra поля если есть
+        if hasattr(record, 'event'):
+            log_data['event'] = record.event
+        if hasattr(record, 'ticket_id'):
+            log_data['ticket_id'] = record.ticket_id
+        if hasattr(record, 'category'):
+            log_data['category'] = record.category
+        if hasattr(record, 'confidence'):
+            log_data['confidence'] = record.confidence
+        if hasattr(record, 'processing_time_ms'):
+            log_data['processing_time_ms'] = record.processing_time_ms
+        if hasattr(record, 'auto_applied'):
+            log_data['auto_applied'] = record.auto_applied
+        if hasattr(record, 'error_type'):
+            log_data['error_type'] = record.error_type
+        if hasattr(record, 'error_message'):
+            log_data['error_message'] = record.error_message
+
+        return json.dumps(log_data, ensure_ascii=False)
 
 
 def setup_logger(name: str = "ai_assistant") -> logging.Logger:
@@ -35,10 +67,7 @@ def setup_logger(name: str = "ai_assistant") -> logging.Logger:
     # Форматтеры
     if LOG_FORMAT == "json":
         # JSON формат для машинной обработки
-        json_formatter = jsonlogger.JsonFormatter(
-            '%(asctime)s %(name)s %(levelname)s %(message)s',
-            timestamp=True
-        )
+        json_formatter = JSONFormatter()
         console_handler.setFormatter(json_formatter)
         file_handler.setFormatter(json_formatter)
     else:

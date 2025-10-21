@@ -5,11 +5,11 @@ import time
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-from app.config import FLASK_HOST, FLASK_PORT, FLASK_DEBUG, AUTO_APPLY_THRESHOLD
-from app.classifier import get_classifier
-from app.naumen_integration import get_naumen_integration
-from app.utils.logger import logger, log_classification, log_error
-from app.utils.metrics import (
+from ai_assistant.app.config import FLASK_HOST, FLASK_PORT, FLASK_DEBUG, AUTO_APPLY_THRESHOLD
+from ai_assistant.app.classifier import get_classifier
+from ai_assistant.app.naumen_integration import get_naumen_integration
+from ai_assistant.app.utils.logger import logger, log_classification, log_error
+from ai_assistant.app.utils.metrics import (
     MetricsCollector,
     metrics_endpoint
 )
