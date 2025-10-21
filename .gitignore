@@ -38,6 +38,7 @@ env/
 
 # Configuration
 config.py
+!ai_assistant/app/config.py
 *.env
 .env.local
 

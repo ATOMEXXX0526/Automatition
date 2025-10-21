@@ -6,16 +6,6 @@ echo AI Assistant - Запуск на Windows
 echo ========================================
 echo.
 
-REM Проверка наличия config.py
-if not exist "ai_assistant\app\config.py" (
-    echo Создание config.py из примера...
-    copy config.py.example ai_assistant\app\config.py
-    echo.
-    echo ВНИМАНИЕ: Отредактируйте ai_assistant\app\config.py с вашими настройками!
-    echo.
-    pause
-)
-
 REM Проверка наличия модели
 if not exist "ai_assistant\models\classifier_model.pkl" (
     echo Модель не найдена. Запускаем обучение...
