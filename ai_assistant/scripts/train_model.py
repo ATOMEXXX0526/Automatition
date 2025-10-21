@@ -17,8 +17,8 @@ from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import classification_report, accuracy_score
 
-from app.classifier import TextPreprocessor
-from app.config import MODELS_DIR, DATA_DIR
+from ai_assistant.app.classifier import TextPreprocessor
+from ai_assistant.app.config import MODELS_DIR, DATA_DIR
 
 
 def load_training_data():
@@ -64,9 +64,9 @@ def train_category_model(df: pd.DataFrame, preprocessor: TextPreprocessor):
     X = df['processed_text']
     y = df['category']
 
-    # Разделение на train/test
+    # Разделение на train/test (без stratify из-за малого количества данных)
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42, stratify=y
+        X, y, test_size=0.2, random_state=42
     )
 
     # Создание pipeline
@@ -124,9 +124,9 @@ def train_priority_model(df: pd.DataFrame, preprocessor: TextPreprocessor):
     X = df['processed_text']
     y = df['priority']
 
-    # Разделение на train/test
+    # Разделение на train/test (без stratify из-за малого количества данных)
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42, stratify=y
+        X, y, test_size=0.2, random_state=42
     )
 
     # Создание pipeline

@@ -9,9 +9,8 @@ from typing import Dict, Tuple, Optional
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
-import pymorphy2
 
-from app.config import (
+from ai_assistant.app.config import (
     MODEL_PATH,
     VECTORIZER_PATH,
     CATEGORIES,
@@ -20,14 +19,21 @@ from app.config import (
     CATEGORY_TO_GROUP_MAPPING,
     MIN_CONFIDENCE_THRESHOLD
 )
-from app.utils.logger import logger
+from ai_assistant.app.utils.logger import logger
 
 
 class TextPreprocessor:
-    """Предобработка русского текста"""
+    """Предобработка русского текста (упрощенная версия без pymorphy2)"""
 
     def __init__(self):
-        self.morph = pymorphy2.MorphAnalyzer()
+        # Стоп-слова для русского языка (основные)
+        self.stopwords = set([
+            'и', 'в', 'во', 'не', 'что', 'он', 'на', 'я', 'с', 'со', 'как', 'а', 'то',
+            'все', 'она', 'так', 'его', 'но', 'да', 'ты', 'к', 'у', 'же', 'вы', 'за',
+            'бы', 'по', 'только', 'ее', 'мне', 'было', 'вот', 'от', 'меня', 'еще', 'нет',
+            'о', 'из', 'ему', 'теперь', 'когда', 'даже', 'ну', 'вдруг', 'ли', 'если', 'уже',
+            'или', 'ни', 'быть', 'был', 'него', 'до', 'вас', 'нибудь', 'опять', 'уж', 'вам'
+        ])
 
     def preprocess(self, text: str) -> str:
         """
@@ -46,20 +52,19 @@ class TextPreprocessor:
         text = text.lower()
 
         # Удаление спецсимволов (оставляем буквы и пробелы)
-        text = re.sub(r'[^а-яёa-z\s]', ' ', text)
+        text = re.sub(r'[^а-яёa-z0-9\s]', ' ', text)
 
         # Удаление лишних пробелов
         text = re.sub(r'\s+', ' ', text).strip()
 
-        # Лемматизация (приведение к базовой форме)
+        # Удаление стоп-слов и коротких слов
         words = text.split()
-        lemmas = []
+        filtered_words = []
         for word in words:
-            if len(word) > 2:  # Пропускаем короткие слова
-                parsed = self.morph.parse(word)[0]
-                lemmas.append(parsed.normal_form)
+            if len(word) > 2 and word not in self.stopwords:
+                filtered_words.append(word)
 
-        return ' '.join(lemmas)
+        return ' '.join(filtered_words)
 
 
 class TicketClassifier:
@@ -213,7 +218,7 @@ class TicketClassifier:
         Returns:
             Действие: auto_apply, suggest, manual
         """
-        from app.config import AUTO_APPLY_THRESHOLD
+        from ai_assistant.app.config import AUTO_APPLY_THRESHOLD
 
         if confidence >= AUTO_APPLY_THRESHOLD:
             return "auto_apply"

@@ -8,8 +8,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from naumen_sdk import NaumenClient
-from app.config import NAUMEN_URL, NAUMEN_API_KEY, NAUMEN_VERIFY_SSL, DRY_RUN_MODE
-from app.utils.logger import logger
+from ai_assistant.app.config import NAUMEN_URL, NAUMEN_API_KEY, NAUMEN_VERIFY_SSL, DRY_RUN_MODE
+from ai_assistant.app.utils.logger import logger
 from typing import Dict, Optional
 
 
