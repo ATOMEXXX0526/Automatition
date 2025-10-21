@@ -1,0 +1,42 @@
+"""
+Пример конфигурационного файла для Naumen Service Desk автоматизации
+Скопируйте этот файл в config.py и заполните своими данными
+"""
+
+# Настройки подключения к Naumen Service Desk
+NAUMEN_URL = "https://your-naumen-server.com"
+NAUMEN_API_KEY = "your-api-key-here"
+VERIFY_SSL = True
+
+# UUID пользователей и команд (примеры)
+DEFAULT_CLIENT_UUID = "00000000-0000-0000-0000-000000000000"
+
+# Маппинг команд по ключевым словам
+TEAM_MAPPING = {
+    "сеть": "team-uuid-network",
+    "1c": "team-uuid-1c",
+    "почта": "team-uuid-email",
+    "windows": "team-uuid-windows",
+    "linux": "team-uuid-linux",
+    "безопасность": "team-uuid-security",
+}
+
+# Настройки SLA мониторинга
+SLA_WARNING_THRESHOLD = 0.8  # Предупреждение при 80% использования времени
+SLA_CHECK_INTERVAL = 300  # Проверка каждые 5 минут (секунды)
+
+# Настройки массовых операций
+BULK_OPERATION_DELAY = 0.5  # Задержка между запросами (секунды)
+MAX_WORKERS = 5  # Максимальное количество параллельных потоков
+
+# Настройки логирования
+LOG_LEVEL = "INFO"
+LOG_FILE = "naumen_automation.log"
+
+# Email уведомления (опционально)
+EMAIL_NOTIFICATIONS_ENABLED = False
+SMTP_SERVER = "smtp.example.com"
+SMTP_PORT = 587
+SMTP_USERNAME = "notifications@example.com"
+SMTP_PASSWORD = "password"
+NOTIFICATION_RECIPIENTS = ["admin@example.com"]
